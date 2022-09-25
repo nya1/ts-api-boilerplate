@@ -4,7 +4,7 @@ import {
   MaxLength,
   NotContains,
   IsOptional,
-  IsBoolean,
+  IsBoolean
 } from 'class-validator';
 import { validate } from '../util/validate';
 

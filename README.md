@@ -120,18 +120,18 @@ Your OpenAPI/swagger spec file generated [build/swagger.json](build/swagger.json
 
 ## Directory structure
 
-- src - source files
-  - controllers - where we define external endpoints
-  - services - internal business logic
-  - entities - tables
-  - requests - where we store the expected request data shape
-  - util - helper functions
-  - ioc - inversion of control helper/setup
-  - database - contains helper constant `Database` to interact with the database
-  - types - augment express typing
-- test - test files
-  - intergration - tests related to the HTTP API (we call the HTTP API directly), a virtual database is used to make the testing easier and faster
-  - unit - tests related to calling the functions/services directly
-- scripts - helper scripts mostly for development use only, cleanup etc.
-- build - output of tsoa build, contains the output swagger.json
-- dist - compiled source output (javascript)
+- **src** - source files
+  - **controllers** - where we define external endpoints
+  - **services** - internal business logic
+  - **entities** - tables
+  - **requests** - where we store the expected request data shape
+  - **util** - helper functions
+  - **ioc** - inversion of control helper/setup
+  - **database** - contains helper constant `Database` to interact with the database
+  - **types** - augment express typing
+- **test** - test files
+  - **intergration** - tests related to the HTTP API (we call the HTTP API directly), a virtual database is used to make the testing easier and faster
+  - **unit** - tests related to calling the functions/services directly
+- **scripts** - helper scripts mostly for development use only, cleanup etc.
+- **build** - output of tsoa build, contains the output swagger.json
+- **dist** - compiled source output (javascript)
