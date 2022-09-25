@@ -1,0 +1,564 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"Todo": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"content": {
+						"type": "string",
+						"description": "content/description"
+					},
+					"isDone": {
+						"type": "boolean",
+						"description": "if true the todo is done"
+					},
+					"createdByUser": {
+						"$ref": "#/components/schemas/User"
+					},
+					"createdByUserId": {
+						"type": "number",
+						"format": "double",
+						"description": "reference to the user that created this todo"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"content",
+					"isDone",
+					"createdByUser",
+					"createdByUserId",
+					"updatedAt",
+					"createdAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"User": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"fullName": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"todos": {
+						"items": {
+							"$ref": "#/components/schemas/Todo"
+						},
+						"type": "array"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"fullName",
+					"email",
+					"createdAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"NewTodoRequest": {
+				"description": "expected body to create a new todo",
+				"properties": {
+					"content": {
+						"type": "string",
+						"description": "text content"
+					}
+				},
+				"required": [
+					"content"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateTodoRequest": {
+				"description": "expected body to update a todo",
+				"properties": {
+					"content": {
+						"type": "string",
+						"description": "text content"
+					},
+					"isDone": {
+						"type": "boolean",
+						"description": "true if todo is done"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"NewUserRequest": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string",
+						"description": "minimum 8 length"
+					},
+					"fullName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"email",
+					"password",
+					"fullName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LoginRequest": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string",
+						"description": "minimum 8 length"
+					}
+				},
+				"required": [
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"jwt": {
+				"type": "http",
+				"name": "access_token",
+				"in": "header"
+			}
+		}
+	},
+	"info": {
+		"title": "backend",
+		"version": "0.1.0",
+		"license": {
+			"name": "MIT"
+		},
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/ping": {
+			"get": {
+				"operationId": "Ping",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"properties": {
+												"date": {
+													"type": "string",
+													"format": "date-time"
+												},
+												"nodeEnv": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"date",
+												"nodeEnv"
+											],
+											"type": "object"
+										},
+										"success": {
+											"type": "boolean"
+										}
+									},
+									"required": [
+										"result",
+										"success"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "allows to ping endpoint",
+				"tags": [
+					"Ping"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/todo": {
+			"get": {
+				"operationId": "List",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"count": {
+											"type": "number",
+											"format": "double"
+										},
+										"result": {
+											"items": {
+												"$ref": "#/components/schemas/Todo"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"count",
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "list and search todos",
+				"tags": [
+					"Todo"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "filter by isDone field",
+						"in": "query",
+						"name": "isDone",
+						"required": false,
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"description": "filter by searching for a word in the content field",
+						"in": "query",
+						"name": "partialContent",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"properties": {
+												"id": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"id"
+											],
+											"type": "object"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "create new todo",
+				"tags": [
+					"Todo"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/NewTodoRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/todo/{id}": {
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"success": {
+											"type": "boolean"
+										}
+									},
+									"required": [
+										"success"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "update todo",
+				"tags": [
+					"Todo"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "todo identifier returned in creation (or list)",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateTodoRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user": {
+			"get": {
+				"operationId": "Me",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/user/signup": {
+			"post": {
+				"operationId": "Signup",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"properties": {
+												"jwt": {
+													"type": "string"
+												},
+												"id": {
+													"type": "number",
+													"format": "double"
+												}
+											},
+											"required": [
+												"jwt",
+												"id"
+											],
+											"type": "object"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "register new user, return also jwt token",
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/NewUserRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"properties": {
+												"jwt": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"jwt"
+											],
+											"type": "object"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "login, get jwt token",
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/user/refresh": {
+			"post": {
+				"operationId": "Refresh",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"result": {
+											"properties": {
+												"jwt": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"jwt"
+											],
+											"type": "object"
+										}
+									},
+									"required": [
+										"result"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "refresh the current jwt",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "https://localhost:3000/"
+		}
+	]
+}
