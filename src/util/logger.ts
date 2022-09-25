@@ -26,7 +26,7 @@ export class PinoTypeOrmLogger implements Logger {
 
   logQuery(
     query: string,
-    parameters?: any[]
+    parameters?: unknown[]
     // _queryRunner?: QueryRunner
   ) {
     this.logger.debug(
@@ -38,7 +38,7 @@ export class PinoTypeOrmLogger implements Logger {
   logQueryError(
     error: string,
     query: string,
-    parameters?: any[]
+    parameters?: unknown[]
     // _queryRunner?: QueryRunner
   ) {
     this.logger.error(
@@ -50,7 +50,7 @@ export class PinoTypeOrmLogger implements Logger {
   logQuerySlow(
     time: number,
     query: string,
-    parameters?: any[]
+    parameters?: unknown[]
     // _queryRunner?: QueryRunner
   ) {
     this.logger.warn(
@@ -75,7 +75,7 @@ export class PinoTypeOrmLogger implements Logger {
 
   log(
     level: 'log' | 'info' | 'warn',
-    message: any
+    message: unknown
     // _queryRunner?: QueryRunner
   ) {
     switch (level) {

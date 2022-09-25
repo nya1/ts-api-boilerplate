@@ -1,4 +1,3 @@
-import { Type } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
@@ -6,9 +5,6 @@ import {
   NotContains,
   IsOptional,
   IsBoolean,
-  ValidateNested,
-  IsDefined,
-  ArrayMinSize
 } from 'class-validator';
 import { validate } from '../util/validate';
 
