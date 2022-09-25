@@ -19,7 +19,6 @@ Included a sample todo app with jwt based authentication.
 - Easy to use inversion of control with helper functions
 - JWT-based authentication sample
 - HTTP Rate limiter
-- CI/CD with GitHub Actions
 - While developing start a local PostgreSQL instance via one command `bash bootstrap.sh`
 - Supports watch mode
 - Git hooks to format and lint the code before committing

@@ -9,20 +9,23 @@ import { logger } from '../util/logger';
 
 @provideSingleton(UserService)
 export class UserService {
-  private repo = Database().getRepository(User);
-
   constructor(@inject(AuthService) private authService: AuthService) {}
+
+  // helper to get repository
+  private get userRepository() {
+    return Database().getRepository(User);
+  }
 
   async create(user: Partial<User>, plainTextPsw: string) {
     const passwordHash = await bcryptHash(plainTextPsw);
 
-    const entity = this.repo.create({
+    const entity = this.userRepository.create({
       email: user.email,
       fullName: user.fullName,
       passwordHash
     });
     logger.debug(entity, 'creating user');
-    const res = await this.repo.save(entity);
+    const res = await this.userRepository.save(entity);
 
     return res;
   }

@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config(); // load .env
-import { User } from '../src/entities/user';
 import { Database } from '../src/database';
 import { UserService } from '../src/services/user';
+import { User } from '../src/entities/user';
 import { iocContainer } from '../src/ioc';
 
 /**
