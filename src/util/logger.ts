@@ -1,6 +1,7 @@
 import pino from 'pino';
 import { Logger } from 'typeorm';
 import { getConfig } from './config';
+import type { PrettyOptions } from 'pino-pretty';
 
 const config = getConfig();
 
@@ -10,8 +11,13 @@ const enablePrettyPrint = config.isDevEnv;
 let transport: pino.TransportSingleOptions | undefined = undefined;
 
 if (enablePrettyPrint) {
+  const pinoPrettyOptions: PrettyOptions = {
+    // in pretty mode we can ignore these default fields
+    ignore: 'pid,hostname,NODE_ENV'
+  };
   transport = {
-    target: 'pino-pretty'
+    target: 'pino-pretty',
+    options: pinoPrettyOptions
   };
 }
 
