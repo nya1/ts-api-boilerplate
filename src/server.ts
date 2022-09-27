@@ -1,9 +1,18 @@
+// load from .env file
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
+
 import 'reflect-metadata';
+import { getConfig } from './util/config';
 import { app } from './app';
 import { Database } from './database';
 import { logger } from './util/logger';
 
-const port = process.env.PORT || 3000;
+const config = getConfig();
+
+logger.debug(config, `config loaded`);
+
+const port = config.PORT || 3000;
 
 Database()
   .initialize()
@@ -13,5 +22,5 @@ Database()
     );
   })
   .catch((err) => {
-    logger.error('unable to connect to database', err);
+    logger.error(err, 'unable to connect to database');
   });

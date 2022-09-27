@@ -1,10 +1,13 @@
 import { provideSingleton } from '../util/provideSingleton';
 import { Route, Get, Tags } from 'tsoa';
+import { getConfig } from '../util/config';
 
 @Route('/ping') // base path for controller
 @Tags('Ping') // openapi section for controller endpoints
 @provideSingleton(PingController) // auto inject
 export class PingController {
+  private config = getConfig();
+
   /**
    * allows to ping endpoint
    */
@@ -13,7 +16,7 @@ export class PingController {
     return {
       success: true,
       result: {
-        nodeEnv: process.env.NODE_ENV,
+        nodeEnv: this.config.NODE_ENV,
         date: new Date()
       }
     };

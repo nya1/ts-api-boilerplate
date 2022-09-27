@@ -1,24 +1,35 @@
 import pino from 'pino';
 import { Logger } from 'typeorm';
-import { isDevEnv, serviceName } from './config';
+import { getConfig } from './config';
+import type { PrettyOptions } from 'pino-pretty';
+
+const config = getConfig();
 
 // only during development
-const enablePrettyPrint = isDevEnv;
+const enablePrettyPrint = config.isDevEnv;
 
 let transport: pino.TransportSingleOptions | undefined = undefined;
 
 if (enablePrettyPrint) {
+  const pinoPrettyOptions: PrettyOptions = {
+    // in pretty mode we can ignore these default fields
+    ignore: 'pid,hostname,NODE_ENV'
+  };
   transport = {
-    target: 'pino-pretty'
+    target: 'pino-pretty',
+    options: pinoPrettyOptions
   };
 }
 
-const logLevel: pino.Level = isDevEnv ? 'debug' : 'info';
-
 export const logger = pino({
-  name: serviceName,
+  name: config.SERVICE_NAME,
   transport,
-  level: logLevel
+  level: config.LOG_LEVEL,
+  // https://getpino.io/#/docs/api?id=base-object
+  base: {
+    pid: process?.pid,
+    NODE_ENV: config.NODE_ENV
+  }
 });
 
 export class PinoTypeOrmLogger implements Logger {

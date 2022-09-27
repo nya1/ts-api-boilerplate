@@ -1,5 +1,6 @@
 import { resolve } from 'path';
 import { DataSource } from 'typeorm';
+import { getConfig } from '../util/config';
 import { logger, PinoTypeOrmLogger } from '../util/logger';
 
 let _cachedDatabase: DataSource | undefined;
@@ -10,14 +11,15 @@ let _cachedDatabase: DataSource | undefined;
  */
 export function Database() {
   if (!_cachedDatabase) {
+    const config = getConfig();
     _cachedDatabase = new DataSource({
       type: 'postgres',
-      host: process.env.POSTGRES_HOST || 'localhost',
-      port: Number(process.env.POSTGRES_PORT) || 5432,
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
-      synchronize: process.env.DB_AUTO_SYNC ? true : false,
+      host: config.POSTGRES_HOST || 'localhost',
+      port: Number(config.POSTGRES_PORT) || 5432,
+      username: config.POSTGRES_USER,
+      password: config.POSTGRES_PASSWORD,
+      database: config.POSTGRES_DB,
+      synchronize: config.DB_AUTO_SYNC ? true : false,
       logging: true,
       logger: new PinoTypeOrmLogger(logger),
       // automatically load all entities
