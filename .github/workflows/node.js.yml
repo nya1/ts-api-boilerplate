@@ -27,7 +27,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
     - run: yarn install
+    # run linter
+    - run: yarn lint
     # create .env file before running tests
     - run: cp .env.example .env
+    # before testing we must generate the build/routes.ts file (tsoa)
     - run: yarn build
     - run: yarn test
