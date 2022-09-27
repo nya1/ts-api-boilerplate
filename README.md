@@ -12,6 +12,7 @@ Included a sample todo app with jwt based authentication.
 - Lint and formatting via ESLint + Prettier
 - PostgreSQL as data storage (using [typeorm](https://github.com/typeorm/typeorm/))
 - Automatically generate OpenAPI spec/documentation (thanks to [tsoa](https://github.com/lukeautry/tsoa/))
+- Optimized multi stage Dockerfile
 - Painless testing with Jest
   - [Unit and integration tests samples](test)
   - Helpers to automatically mock the database in memory per test suite (integration tests)

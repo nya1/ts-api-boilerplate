@@ -184,7 +184,12 @@
 													"format": "date-time"
 												},
 												"nodeEnv": {
-													"type": "string"
+													"type": "string",
+													"enum": [
+														"development",
+														"staging",
+														"production"
+													]
 												}
 											},
 											"required": [
