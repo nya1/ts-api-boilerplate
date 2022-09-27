@@ -6,7 +6,7 @@ import packageJson from '../../package.json';
  */
 export interface AppConfig {
   SERVICE_NAME: string;
-  NODE_ENV: 'development' | 'staging' | 'production';
+  NODE_ENV: 'test' | 'development' | 'staging' | 'production';
   /**
    * true if we are running in a development env
    */
@@ -30,7 +30,8 @@ export function getConfig(): AppConfig {
 
   // set fallbacks
   const nodeEnv = fromEnv?.NODE_ENV || 'development';
-  const isDevEnv = nodeEnv === 'development' ? true : false;
+  const isDevEnv =
+    nodeEnv === 'development' || nodeEnv === 'test' ? true : false;
 
   const serviceName: string =
     fromEnv?.SERVICE_NAME || packageJson?.name || 'server';
